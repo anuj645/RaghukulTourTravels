@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ action }} Tour Package{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+          <h4 class="mb-0"><i class="fas fa-map-marked-alt me-2"></i>{{ action }} Tour Package</h4>
+        </div>
+        <div class="card-body p-4">
+
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Title & Slug -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Title *</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                  <div class="text-danger small mt-1">{{ form.title.errors.0 }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Slug *
+                  <span class="text-muted fw-normal small">(URL-friendly name)</span>
+                </label>
+                {{ form.slug }}
+                {% if form.slug.errors %}
+                  <div class="text-danger small mt-1">{{ form.slug.errors.0 }}</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Category & Destination -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Category</label>
+                {{ form.category }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Destination *</label>
+                {{ form.destination }}
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Description *</label>
+              {{ form.description }}
+            </div>
+
+            <!-- Highlights & Itinerary -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Highlights</label>
+              {{ form.highlights }}
+              <div class="form-text">Enter one highlight per line.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Itinerary</label>
+              {{ form.itinerary }}
+            </div>
+
+            <!-- Pricing -->
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <label class="form-label fw-semibold">Price Per Person (₹) *</label>
+                {{ form.price_per_person }}
+                {% if form.price_per_person.errors %}
+                  <div class="text-danger small mt-1">{{ form.price_per_person.errors.0 }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-semibold">Discounted Price (₹)</label>
+                {{ form.discounted_price }}
+                {% if form.discounted_price.errors %}
+                  <div class="text-danger small mt-1">{{ form.discounted_price.errors.0 }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-semibold">Duration (Days) *</label>
+                {{ form.duration_days }}
+              </div>
+            </div>
+
+            <!-- Group & Difficulty -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Max Group Size</label>
+                {{ form.max_group_size }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Difficulty</label>
+                {{ form.difficulty }}
+              </div>
+            </div>
+
+            <!-- Cover Image -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Cover Image</label>
+              {{ form.cover_image }}
+              {% if form.instance.cover_image %}
+                <div class="mt-2">
+                  <small class="text-muted">Current image:</small>
+                  <img src="{{ form.instance.cover_image.url }}" height="80" class="d-block mt-1 rounded">
+                </div>
+              {% endif %}
+            </div>
+
+            <!-- Checkboxes -->
+            <div class="mb-4 d-flex gap-4">
+              <div class="form-check">
+                {{ form.is_featured }}
+                <label class="form-check-label">Featured Package</label>
+              </div>
+              <div class="form-check">
+                {{ form.is_active }}
+                <label class="form-check-label">Active (visible to users)</label>
+              </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-warning fw-bold px-4">
+                <i class="fas fa-save me-1"></i> {{ action }} Package
+              </button>
+              <a href="{% url 'tour_list' %}" class="btn btn-outline-secondary px-4">Cancel</a>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Auto-generate slug from title
+  document.getElementById('id_title').addEventListener('input', function () {
+    const slug = this.value
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')   // remove special chars
+      .replace(/\s+/g, '-');           // spaces → hyphens
+    document.getElementById('id_slug').value = slug;
+  });
+</script>
+{% endblock %}

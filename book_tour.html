@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Book — {{ tour.title }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="card shadow-sm">
+        <div class="card-header bg-warning">
+          <h4 class="mb-0 fw-bold"><i class="fas fa-calendar-check me-2"></i>Book: {{ tour.title }}</h4>
+        </div>
+        <div class="card-body p-4">
+
+          <!-- Tour Summary -->
+          <div class="alert alert-info mb-4">
+            <div class="row">
+              <div class="col-6">
+                <strong>Destination:</strong> {{ tour.destination }}<br>
+                <strong>Duration:</strong> {{ tour.duration_days }} Days
+              </div>
+              <div class="col-6">
+                <strong>Price:</strong> ₹{{ tour.final_price }}/person<br>
+                <strong>Max Group:</strong> {{ tour.max_group_size }} people
+              </div>
+            </div>
+          </div>
+
+          <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Travel Date *</label>
+              {{ form.travel_date }}
+              {% if form.travel_date.errors %}
+                <div class="text-danger small mt-1">{{ form.travel_date.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Number of Persons *</label>
+              {{ form.num_persons }}
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Special Requests</label>
+              {{ form.special_requests }}
+            </div>
+
+            <!-- Total Price (calculated via JS) -->
+            <div class="alert alert-success">
+              <strong>Estimated Total: </strong>
+              <span id="total_price">₹{{ tour.final_price }}</span>
+            </div>
+
+            <button type="submit" class="btn btn-warning fw-bold w-100">
+              <i class="fas fa-check-circle me-2"></i>Confirm Booking
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const pricePerPerson = {{ tour.final_price }};
+  document.getElementById('id_num_persons').addEventListener('input', function () {
+    const total = pricePerPerson * (parseInt(this.value) || 1);
+    document.getElementById('total_price').textContent = '₹' + total.toLocaleString('en-IN');
+  });
+</script>
+{% endblock %}

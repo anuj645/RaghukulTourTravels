@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Booking #{{ booking.pk }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h4 class="mb-0"><i class="fas fa-check-circle me-2"></i>Booking Confirmed!</h4>
+        </div>
+        <div class="card-body p-4">
+          <table class="table table-borderless">
+            <tr><th>Booking ID</th><td>#{{ booking.pk }}</td></tr>
+            <tr><th>Tour</th><td>{{ booking.tour.title }}</td></tr>
+            <tr><th>Destination</th><td>{{ booking.tour.destination }}</td></tr>
+            <tr><th>Travel Date</th><td>{{ booking.travel_date }}</td></tr>
+            <tr><th>Persons</th><td>{{ booking.num_persons }}</td></tr>
+            <tr><th>Total Price</th><td class="fw-bold text-success">₹{{ booking.total_price }}</td></tr>
+            <tr><th>Status</th>
+              <td>
+                <span class="badge bg-{% if booking.status == 'confirmed' %}success{% elif booking.status == 'pending' %}warning{% elif booking.status == 'cancelled' %}danger{% else %}secondary{% endif %}">
+                  {{ booking.get_status_display }}
+                </span>
+              </td>
+            </tr>
+          </table>
+
+          <div class="d-flex gap-2 mt-3">
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-dark">My Dashboard</a>
+            {% if booking.status == 'pending' %}
+              <a href="{% url 'cancel_booking' booking.pk %}" class="btn btn-outline-danger"
+                 onclick="return confirm('Are you sure you want to cancel?')">
+                Cancel Booking
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

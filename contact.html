@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row">
+
+    <!-- Contact Form -->
+    <div class="col-lg-7">
+      <h2 class="fw-bold mb-4">📬 Contact Us</h2>
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <form method="POST">
+            {% csrf_token %}
+            <div class="row mb-3">
+              <div class="col">
+                <label class="form-label fw-semibold">Your Name</label>
+                {{ form.name }}
+              </div>
+              <div class="col">
+                <label class="form-label fw-semibold">Phone</label>
+                {{ form.phone }}
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Email</label>
+              {{ form.email }}
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Subject</label>
+              {{ form.subject }}
+            </div>
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Message</label>
+              {{ form.message }}
+            </div>
+            <button type="submit" class="btn btn-warning fw-bold px-4">
+              <i class="fas fa-paper-plane me-2"></i>Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="col-lg-5 mt-4 mt-lg-0">
+      <h2 class="fw-bold mb-4">📍 Find Us</h2>
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <ul class="list-unstyled">
+            <li class="mb-3">
+              <i class="fas fa-map-marker-alt text-warning me-2"></i>
+              123 Travel Street, Bhopal, MP, India
+            </li>
+            <li class="mb-3">
+              <i class="fas fa-phone text-warning me-2"></i>
+              +91 98765 43210
+            </li>
+            <li class="mb-3">
+              <i class="fas fa-envelope text-warning me-2"></i>
+              info@raghukultoursTravel.com
+            </li>
+            <li class="mb-3">
+              <i class="fas fa-clock text-warning me-2"></i>
+              Mon–Sat: 9AM – 6PM
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

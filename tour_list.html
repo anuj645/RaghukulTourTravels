@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Tour Packages — Raghukul Tours{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">🗺️ All Tour Packages</h2>
+    {% if user.is_staff %}
+      <a href="{% url 'tour_create' %}" class="btn btn-warning fw-bold">
+        <i class="fas fa-plus me-1"></i> Add New Tour
+      </a>
+    {% endif %}
+  </div>
+
+  <!-- Category Filter -->
+  <div class="mb-4">
+    <a href="{% url 'tour_list' %}" class="btn btn-sm btn-outline-dark me-2 mb-2">All</a>
+    {% for cat in categories %}
+      <a href="?category={{ cat.slug }}" class="btn btn-sm btn-outline-dark me-2 mb-2">
+        {{ cat.name }}
+      </a>
+    {% endfor %}
+  </div>
+
+  <!-- Tour Cards -->
+  {% if packages %}
+    <div class="row g-4">
+      {% for tour in packages %}
+        <div class="col-md-4">
+          <div class="card h-100 shadow-sm">
+
+            {% if tour.cover_image %}
+              <img src="{{ tour.cover_image.url }}" class="card-img-top" style="height:200px; object-fit:cover;">
+            {% else %}
+              <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height:200px;">
+                <i class="fas fa-mountain fa-3x"></i>
+              </div>
+            {% endif %}
+
+            <div class="card-body">
+              {% if tour.is_featured %}
+                <span class="badge bg-warning text-dark mb-2">⭐ Featured</span>
+              {% endif %}
+              <h5 class="card-title fw-bold">{{ tour.title }}</h5>
+              <p class="text-muted small">
+                <i class="fas fa-map-marker-alt me-1"></i>{{ tour.destination }} &nbsp;|&nbsp;
+                <i class="fas fa-clock me-1"></i>{{ tour.duration_days }} Days
+              </p>
+              <p class="card-text">{{ tour.description|truncatewords:20 }}</p>
+            </div>
+
+            <div class="card-footer d-flex justify-content-between align-items-center">
+              <div>
+                {% if tour.discounted_price %}
+                  <span class="text-muted text-decoration-line-through small">₹{{ tour.price_per_person }}</span>
+                  <span class="fw-bold text-success ms-1">₹{{ tour.discounted_price }}</span>
+                {% else %}
+                  <span class="fw-bold">₹{{ tour.price_per_person }}</span>
+                {% endif %}
+                <span class="text-muted small">/person</span>
+              </div>
+              <a href="{% url 'tour_detail' tour.slug %}" class="btn btn-sm btn-warning">View Details</a>
+            </div>
+
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+  {% else %}
+    <div class="text-center py-5">
+      <i class="fas fa-map-marked-alt fa-4x text-muted mb-3"></i>
+      <h5 class="text-muted">No tour packages found.</h5>
+      {% if user.is_staff %}
+        <a href="{% url 'tour_create' %}" class="btn btn-warning mt-2">Add Your First Tour</a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}
